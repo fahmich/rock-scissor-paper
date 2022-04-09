@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hello WebSocket</title>
+    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <script src="/webjars/jquery/jquery.min.js"></script>
+    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+   
+    <link href="/bootstrap.min.css" rel="stylesheet">
+   <!--  <link href="/style.css" rel="stylesheet">  -->
+    <link href="/style2.css" rel="stylesheet">
+    <script src="/jquery-1.10.2.min.js"></script>
+    
+    <script src="/app.js"></script>
+    <!--  <script src="/main.js"></script> -->
+</head>
+<body>
+<noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being
+    enabled. Please enable
+    Javascript and reload this page!</h2></noscript>
+    
+  
+ <br>
+ <hr>
+ <div>
+<div id="main-content" id="block_player1" class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label for="connect">player1:</label>
+                    <button id="connect" class="btn btn-default" type="submit">Connect</button>
+                    <button id="disconnect" class="btn btn-default" type="submit" disabled="disabled">Disconnect
+                    </button>
+                </div>
+            </form>
+        </div>
+	         
+        <div class="col-md-12" id="pickchoice" style="display: none;">
+        <label for="name">pick y choice ?</label>
+            <form class="form-inline">  
+            
+         <!--     <div class="form-group  row"> 
+                <div class="col-md-4">
+                    <input type="radio" id="Rock" name="game" value="Rock"
+                           checked>
+                    <label for="Rock">Rock</label>
+                    <label for="Rock"><img src="./Rock.png" /></label>
+                </div>
+
+                <div class="col-md-4">
+                    <input type="radio" id="Paper" name="game" value="Paper">
+                      <label for="Paper">Paper</label>
+                     <label for="Paper"><img src="./Paper.png" /></label>
+                </div>
+
+                <div class="col-md-4">
+                    <input type="radio" id="Scissor" name="game" value="Scissor">
+                      <label for="Scissor">Scissor</label>
+                    <label for="Scissor"><img src="./Scissor.png" /></label>
+                </div>
+ 
+               </div>-->
+                  
+                <button id="send" class="btn btn-default" type="submit">validate</button>
+            </form>
+        </div>
+ 
+    </div> 
+    <div class="row">
+        <div class="col-md-12">
+            <table id="conversation" class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Greetings</th>
+                </tr>
+                </thead>
+                <tbody id="greetings">
+                </tbody>
+            </table>
+            
+        </div>
+         <br>
+    </div>
+</div>
+
+<div id="main-content2"   class="container" >
+  
+    <div class="row">
+        <div class="col-md-6">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label for="connect2">player2:</label>
+                    <button id="connect2" class="btn btn-default" type="submit">Connect</button>
+                    <button id="disconnect2" class="btn btn-default" type="submit" disabled="disabled">Disconnect
+                    </button>
+                </div>
+            </form>
+        </div>
+	         
+      <!--    <div class="col-md-6"  id="pickchoice2" style="display: none;">
+            <label for="name">pick y choice ?</label>
+            <form class="form-inline">
+             
+            <div class="form-group"> 
+                <div>
+                    <input type="radio" id="huey" name="gameChoice1" value="Rock"
+                           checked>
+                    <label for="huey">Rock</label>
+                </div>
+
+                <div>
+                    <input type="radio" id="dewey" name="gameChoice1" value="Paper">
+                    <label for="dewey">Paper</label>
+                </div>
+
+                <div>
+                    <input type="radio" id="Scissor" name="gameChoice1" value="Scissor">
+                    <label for="Scissor">Scissor</label>
+                </div>
+ 
+               </div>
+                  
+                <button id="send2" class="btn btn-default" type="submit">validate</button>
+            </form>
+        </div> --> 
+ 
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <table id="conversation2" class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Greetings</th>
+                </tr>
+                </thead>
+                <tbody id="greetings2">
+                </tbody>
+                 
+            </table>
+            
+        </div>
+         <br>
+         <hr>
+    </div>
+</div>
+ 
+   <!--    <img src="./Rock.png" alt="Image description"> 
+       <img src="./Paper.png" alt="Image description"> 
+       <img src="./Scissor.png" alt="Image description">  --> 
+</div>  
+  
+  <div class="parent-selector">
+      <div id="score1">nombre de points   :
+      <div id='score1Child1'></div>
+      </div>
+  <div class="select-image">
+    <div class="list-image">
+       <img src="./Rock.png" alt="Rok"> 
+       <img src="./Paper.png" alt="Paper"> 
+      <img src="./Scissor.png" alt="Scissor">
+    </div>
+ 
+    <div class="button" id="button-confirm" style="display: none;"><span>Confirm</span></div>
+    <div class="button" id="button-confirm2" style="display: none;"><span>Confirm</span></div>
+    <div id="score2"> l'adversaire :
+     <div id='score2Child2'></div></div>
+       <div class="list-image2">
+       <img src="./Rock.png" alt="Rok2"> 
+       <img src="./Paper.png" alt="Paper2"> 
+      <img src="./Scissor.png" alt="Scissor2">
+      </div>
+  </div>
+      <div>nombre de points de l'adversaire :</div>
+  
+  <div class="view-image" style="display: none;">
+    <img src=""/>
+    <div class="button" id="button-other"><span>Other</span></div>
+  </div>
+</div>
+
+
+
+</body>
+<footer>  <div><a href=" https://spring.io/guides/gs/messaging-stomp-websocket/" target="_blanck"> click link demo </a> </div>
+    <div><a href="https://www.baeldung.com/spring-boot-h2-database" target="_blanck"> use h2  </a> </div>
+    <div><a href="http://localhost:8081/h2-console" target="_blanck"> use h2  </a> </div></footer>
+</html>
