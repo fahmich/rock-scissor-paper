@@ -1,5 +1,6 @@
 var stompClient = null;
 var stompClient2 = null;
+var UserId=1;
 
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
@@ -21,6 +22,9 @@ function setConnected2(connected) {
     $("#connect2").prop("disabled", connected);
     $("#disconnect2").prop("disabled", !connected);
      $("#pickchoice2").show();
+ $("#button-confirm2").show();
+
+
     if (connected) {
         $("#conversation2").show();
  		$("#main-content").hide();
@@ -42,25 +46,42 @@ function connectPlayer1() {
         console.log('Connected: ' + frame);
         stompClient.subscribe('/game/choicePicke1', function (greeting) {
 	 
-	    console.log('Connected ++++: ' + JSON.parse(greeting.body)["playerOneChoice"] );
-            showGreeting(JSON.parse(greeting.body)["playerOneChoice"],JSON.parse(greeting.body)["playerTwoChoice"] );
-
-           addScoreWin(JSON.parse(greeting.body)["winGameplayerOneResult"],JSON.parse(greeting.body)["winGameplayerTwoResult"])
+	    console.log('Connected ++++1: ' + JSON.parse(greeting.body)["playerOneChoice"] );
+  
+	 showGreeting(JSON.parse(greeting.body)["playerOneChoice"],JSON.parse(greeting.body)["playerTwoChoice"] );
+     addScoreWin(JSON.parse(greeting.body)["winGameplayerOneResult"],JSON.parse(greeting.body)["winGameplayerTwoResult"])
+               if(JSON.parse(greeting.body)["playerOneChoice"]=="" && JSON.parse(greeting.body)["playerTwoChoice"]==""){
+					  initFunction();
+				}
         });
-    });
+    }); 
 }
+
 function connectPlayer2() {
+	
     var socket = new SockJS('/gs-guide-websocket');
-    stompClient2 = Stomp.over(socket);
-    stompClient2.connect({}, function (frame) {
+    stompClient = Stomp.over(socket);
+    stompClient.connect({}, function (frame) {
         setConnected2(true);
         console.log('Connected: ' + frame);
-        stompClient2.subscribe('/game/choicePicke2', function (greeting) {
-            showGreeting2(JSON.parse(greeting.body).content);
+        stompClient.subscribe('/game/choicePicke1', function (greeting) {
+	 
+	    console.log('Connected ++++2: ' + JSON.parse(greeting.body)["playerOneChoice"] );
+
+		 showGreeting2(JSON.parse(greeting.body)["playerTwoChoice"] ,JSON.parse(greeting.body)["playerOneChoice"]);
+		  addScoreWin(JSON.parse(greeting.body)["winGameplayerTwoResult"],JSON.parse(greeting.body)["winGameplayerOneResult"] );
+				if(JSON.parse(greeting.body)["playerOneChoice"]=="" && JSON.parse(greeting.body)["playerTwoChoice"]==""){
+					  initFunction();
+				}
+       
         });
     });
+
 }
 
+
+ 
+ 
 function disconnect() {
     if (stompClient !== null) {
         stompClient.disconnect();
@@ -70,29 +91,37 @@ function disconnect() {
     console.log("Disconnected");
 }
 function disconnect2() {
-    if (stompClient2 !== null) {
-        stompClient2.disconnect();
+    if (stompClient !== null) {
+        stompClient.disconnect();
     }
     setConnected2(false);
- $("#pickchoice2").hide();
-    console.log("Disconnected2");
+  $("#pickchoice2").hide();
+    console.log("Disconnected");
 }
-
-function sendName() {
+ 
+function sentform() {
 	  $("#pickchoice").hide();
+    userId=1
     stompClient.send("/app/player1", {}, JSON.stringify({'id':1,'name': ChoicePick}));
 }
-function sendName2() {
+function sentform2() {
 	 $("#pickchoice2").hide();
-    stompClient2.send("/app/player2", {}, JSON.stringify({'name': ChoicePick}));
+    userId=2
+    stompClient.send("/app/player1", {}, JSON.stringify({'id':2,'name': ChoicePick}));
 }
+
+function newGame() { 
+	 console.log("newGame");
+    stompClient.send("/app/player1", {}, JSON.stringify({'id':2,'name': "new"})); 
+}
+ 
 
 function showGreeting(message,message1) {
-    $("#greetings").append("<tr><td>+  player1: " + message +" vs player2: "+ message1+ "</td></tr>");
+    $("#greetings").append("<tr><td>+  my Choice: " + message +" vs adversaire: "+ message1+ "</td></tr>");
 }
 
-function showGreeting2(message) {
-    $("#greetings2").append("<tr><td>" + message + "</td></tr>");
+function showGreeting2(message,message1) {
+    $("#greetings2").append("<tr><td>+  my Choice: " + message +" vs adversaire: "+ message1+ "</td></tr>");
 }
 
 function addScoreWin(score1,score2) {
@@ -110,11 +139,11 @@ $(function () {
     });
     $( "#connect" ).click(function() { connectPlayer1(); });
     $( "#disconnect" ).click(function() { disconnect(); });
-    $( "#send" ).click(function() { sendName(); }); 
+    $( "#send" ).click(function() { sentform(); }); 
 
     $( "#connect2" ).click(function() { connectPlayer2(); });
     $( "#disconnect2" ).click(function() { disconnect2(); });
-    $( "#send2" ).click(function() { sendName2(); });
+    $( "#send2" ).click(function() { sentform2(); });
   
 });
 
@@ -165,31 +194,46 @@ $(document).on('input', '#text-src', function(){
 })
 
 $(document).on('click', '#button-confirm', function(){
- /* $('.select-image').hide();*/
-$('#button-confirm').hide();
  
     $('.view-image > img').attr('src', elementSelected.attr('src'));
        console.log('***** ' + ChoicePick);
 
-   sendName(); 
+   sentform(); 
 
   $('.view-image').fadeIn('high');
 })
+
 $(document).on('click', '#button-confirm2', function(){ 
-$('#button-confirm').hide(); 
+ 
     $('.view-image > img').attr('src', elementSelected.attr('src'));
        console.log('***** ' + ChoicePick);
 
-   sendName2();  
+   sentform2();  
   $('.view-image').fadeIn('high');
 })
 
 
-$(document).on('click', '#button-other', function(){
-  $('.view-image').hide();
+$(document).on('click', '#button-other', function(){ 
+ $('.view-image').hide();
   $('.select-image').fadeIn('high');
-$('#button-confirm').show();
+	if(userId==1){
+		 $('#button-confirm').show();
+	}else{
+		 $('#button-confirm2').show();
+	}
+  newGame();
+   
 })
+
+function initFunction() {
+	 $('.view-image').hide();
+  $('.select-image').fadeIn('high');
+	if(userId==1){
+		 $('#button-confirm').show();
+	}else{
+		 $('#button-confirm2').show();
+	} 
+}
 
 
 
