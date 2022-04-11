@@ -10,6 +10,7 @@ public class GameResult {
   private String playerTwoChoice;
   private Boolean playerTwoResult;
   private long winGameplayerTwoResult;
+  
 public String getPlayerOneChoice() {
 	return playerOneChoice;
 }
@@ -52,6 +53,7 @@ public GameResult(String playerOneChoice, Boolean playerOneResult, long winGamep
 	this.playerOneChoice = playerOneChoice;
 	this.playerOneResult = playerOneResult;
 	this.winGameplayerOneResult = winGameplayerOneResult;
+	
 	this.playerTwoChoice = playerTwoChoice;
 	this.playerTwoResult = playerTwoResult;
 	this.winGameplayerTwoResult = winGameplayerTwoResult;

@@ -135,3 +135,30 @@ label,
 .button > span{
   color: #eeeeee
 }
+
+hr {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 0;
+    border-top: 1px solid #665353;
+}
+.view-image > img {
+    max-width: 128px;
+    max-height: 128px;
+    padding: 10px;
+  
+}
+
+.view-image > h3,h1 { 
+    margin-left: 35%;
+}
+
+
+#footer {
+    bottom: 0;
+    width: 100%;
+    position: absolute;
+    height:  height-footer;
+    background-color: #f5f5f5;
+     
+  }

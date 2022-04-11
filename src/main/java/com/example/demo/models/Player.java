@@ -14,12 +14,12 @@ public class Player {
 		@Column(name = "choice")
 		private String choice ;
 		@Column(name = "nbgamewin")
-		private String nbgamewin ;
+		private long nbgamewin ;
 		
 		
 	 
 
-		public Player(long id, String name, String choice, String nbgamewin) {
+		public Player(long id, String name, String choice, long nbgamewin) {
 			super();
 			this.id = id;
 			this.name = name;
@@ -34,11 +34,11 @@ public class Player {
 		}
 
  
-		public String getNbgamewin() {
+		public long getNbgamewin() {
 			return nbgamewin;
 		}
  
-		public void setNbgamewin(String nbgamewin) {
+		public void setNbgamewin(long nbgamewin) {
 			this.nbgamewin = nbgamewin;
 		}
  

@@ -2,6 +2,17 @@ var stompClient = null;
 var stompClient2 = null;
 var UserId=1;
 
+// import jQuery https://code.jquery.com/jquery-3.3.1.min.js
+var elementSelected = null;
+var typeSelected = false;
+var ChoicePick=null;
+
+var elementSelected2 = null;
+var typeSelected2 = false;
+var ChoicePick2=null;
+
+
+
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
     $("#disconnect").prop("disabled", !connected);
@@ -53,6 +64,18 @@ function connectPlayer1() {
                if(JSON.parse(greeting.body)["playerOneChoice"]=="" && JSON.parse(greeting.body)["playerTwoChoice"]==""){
 					  initFunction();
 				}
+			ChoicePick2=JSON.parse(greeting.body)["playerTwoChoice"];	
+			if(ChoicePick2 == "Paper" || ChoicePick2 == "Rock"|| ChoicePick2 == "Scissor"){ 
+			    $('#adversaire').attr('src', './'+ChoicePick2+'.PNG');
+               $("#button-other").show();
+				if(JSON.parse(greeting.body)["winGameplayerOneResult"]==10 && userId==1){
+				    $("#Win").show();	
+				}else if(JSON.parse(greeting.body)["winGameplayerTwoResult"]==10 && userId==1){
+					$("#Lose").show();
+				}
+			}else{
+				 $('#adversaire').attr('src', './wait.PNG');
+			}
         });
     }); 
 }
@@ -73,7 +96,20 @@ function connectPlayer2() {
 				if(JSON.parse(greeting.body)["playerOneChoice"]=="" && JSON.parse(greeting.body)["playerTwoChoice"]==""){
 					  initFunction();
 				}
-       
+       ChoicePick2=JSON.parse(greeting.body)["playerOneChoice"];
+		 
+		if(ChoicePick2 == "Paper" || ChoicePick2 == "Rock"|| ChoicePick2 == "Scissor"){ 
+		    $('#adversaire').attr('src', './'+ChoicePick2+'.PNG');
+
+		$("#button-other").show();
+			if(JSON.parse(greeting.body)["winGameplayerTwoResult"]==10 && userId==2){
+			    $("#Win").show();	
+			}else if(JSON.parse(greeting.body)["winGameplayerOneResult"]==10 && userId==2){
+				$("#Lose").show();
+			}
+		}else{
+			 $('#adversaire').attr('src', './wait.PNG');
+		}
         });
     });
 
@@ -102,17 +138,17 @@ function disconnect2() {
 function sentform() {
 	  $("#pickchoice").hide();
     userId=1
-    stompClient.send("/app/player1", {}, JSON.stringify({'id':1,'name': ChoicePick}));
+    stompClient.send("/app/player1", {}, JSON.stringify({'id':1,'choice': ChoicePick}));
 }
 function sentform2() {
 	 $("#pickchoice2").hide();
     userId=2
-    stompClient.send("/app/player1", {}, JSON.stringify({'id':2,'name': ChoicePick}));
+    stompClient.send("/app/player1", {}, JSON.stringify({'id':2,'choice': ChoicePick}));
 }
 
 function newGame() { 
 	 console.log("newGame");
-    stompClient.send("/app/player1", {}, JSON.stringify({'id':2,'name': "new"})); 
+    stompClient.send("/app/player1", {}, JSON.stringify({'id':2,'choice': "new"})); 
 }
  
 
@@ -156,14 +192,6 @@ $(function () {
 
 
 
-// import jQuery https://code.jquery.com/jquery-3.3.1.min.js
-var elementSelected = null;
-var typeSelected = false;
-var ChoicePick=null;
-
-var elementSelected2 = null;
-var typeSelected2 = false;
-var ChoicePick2=null;
 
 $(document).on('click', '.list-image > img', function(){
   $('.list-image > img').each(function(){
@@ -197,19 +225,31 @@ $(document).on('click', '#button-confirm', function(){
  
     $('.view-image > img').attr('src', elementSelected.attr('src'));
        console.log('***** ' + ChoicePick);
-
-   sentform(); 
-
+     if(ChoicePick2 == "Paper" || ChoicePick2 == "Rock"|| ChoicePick2 == "Scissor"){ 
+		    $('#adversaire').attr('src', './'+ChoicePick2+'.PNG');
+		}else{
+			 $('#adversaire').attr('src', './wait.PNG');
+		}
+   sentform();  
   $('.view-image').fadeIn('high');
+  $('.select-image').hide();
+
 })
 
 $(document).on('click', '#button-confirm2', function(){ 
  
     $('.view-image > img').attr('src', elementSelected.attr('src'));
        console.log('***** ' + ChoicePick);
-
-   sentform2();  
-  $('.view-image').fadeIn('high');
+					console.log('*****44' + ChoicePick2!="");
+			console.log('*****33 //' + ChoicePick2!=null);
+			console.log('*****22 //' + ChoicePick2+"///");
+	if(ChoicePick2 !=null || ChoicePick2 !=""){
+		    $('#adversaire').attr('src', './'+ChoicePick2+'.PNG');
+	
+	}  
+     sentform2();  
+	 $('.view-image').fadeIn('high'); 
+	 $('.select-image').hide();
 })
 
 
@@ -221,8 +261,10 @@ $(document).on('click', '#button-other', function(){
 	}else{
 		 $('#button-confirm2').show();
 	}
-  newGame();
-   
+  newGame(); 
+$("#button-other").hide();
+$("#Lose").hide();
+$("#Win").hide();
 })
 
 function initFunction() {
