@@ -56,11 +56,8 @@ function connectPlayer1() {
         setConnected(true);
         console.log('Connected: ' + frame);
         stompClient.subscribe('/game/choicePicke1', function (greeting) {
-	 
-	    console.log('Connected ++++1: ' + JSON.parse(greeting.body)["playerOneChoice"] );
-  
-	 showGreeting(JSON.parse(greeting.body)["playerOneChoice"],JSON.parse(greeting.body)["playerTwoChoice"] );
-     addScoreWin(JSON.parse(greeting.body)["winGameplayerOneResult"],JSON.parse(greeting.body)["winGameplayerTwoResult"])
+	  
+        addScoreWin(JSON.parse(greeting.body)["winGameplayerOneResult"],JSON.parse(greeting.body)["winGameplayerTwoResult"])
                if(JSON.parse(greeting.body)["playerOneChoice"]=="" && JSON.parse(greeting.body)["playerTwoChoice"]==""){
 					  initFunction();
 				}
@@ -88,11 +85,8 @@ function connectPlayer2() {
         setConnected2(true);
         console.log('Connected: ' + frame);
         stompClient.subscribe('/game/choicePicke1', function (greeting) {
-	 
-	    console.log('Connected ++++2: ' + JSON.parse(greeting.body)["playerOneChoice"] );
-
-		 showGreeting2(JSON.parse(greeting.body)["playerTwoChoice"] ,JSON.parse(greeting.body)["playerOneChoice"]);
-		  addScoreWin(JSON.parse(greeting.body)["winGameplayerTwoResult"],JSON.parse(greeting.body)["winGameplayerOneResult"] );
+	  
+ 		 addScoreWin(JSON.parse(greeting.body)["winGameplayerTwoResult"],JSON.parse(greeting.body)["winGameplayerOneResult"] );
 				if(JSON.parse(greeting.body)["playerOneChoice"]=="" && JSON.parse(greeting.body)["playerTwoChoice"]==""){
 					  initFunction();
 				}
@@ -151,14 +145,7 @@ function newGame() {
     stompClient.send("/app/player1", {}, JSON.stringify({'id':2,'choice': "new"})); 
 }
  
-
-function showGreeting(message,message1) {
-    $("#greetings").append("<tr><td>+  my Choice: " + message +" vs adversaire: "+ message1+ "</td></tr>");
-}
-
-function showGreeting2(message,message1) {
-    $("#greetings2").append("<tr><td>+  my Choice: " + message +" vs adversaire: "+ message1+ "</td></tr>");
-}
+ 
 
 function addScoreWin(score1,score2) {
 	 document.getElementById("score1Child1").remove();
@@ -183,14 +170,7 @@ $(function () {
   
 });
 
-
-
-
-
-
-
-
-
+ 
 
 
 $(document).on('click', '.list-image > img', function(){
@@ -202,17 +182,7 @@ $(document).on('click', '.list-image > img', function(){
    ChoicePick=$(this).attr('alt');
   typeSelected = false;
 });
-/* 
-$(document).on('click', '.list-image2 > img', function(){
-  $('.list-image2 > img').each(function(){
-    $(this).removeClass('active');
-  })
-  $(this).addClass('active');
-  elementSelected2 = $(this);
-   ChoicePick2=$(this).attr('alt');
-  typeSelected2 = false;
-});
-*/
+ 
 $(document).on('input', '#text-src', function(){
   $('.list-image > img').each(function(){
     $(this).removeClass('active');
@@ -223,8 +193,7 @@ $(document).on('input', '#text-src', function(){
 
 $(document).on('click', '#button-confirm', function(){
  
-    $('.view-image > img').attr('src', elementSelected.attr('src'));
-       console.log('***** ' + ChoicePick);
+    $('.view-image > img').attr('src', elementSelected.attr('src')); 
      if(ChoicePick2 == "Paper" || ChoicePick2 == "Rock"|| ChoicePick2 == "Scissor"){ 
 		    $('#adversaire').attr('src', './'+ChoicePick2+'.PNG');
 		}else{
@@ -238,14 +207,9 @@ $(document).on('click', '#button-confirm', function(){
 
 $(document).on('click', '#button-confirm2', function(){ 
  
-    $('.view-image > img').attr('src', elementSelected.attr('src'));
-       console.log('***** ' + ChoicePick);
-					console.log('*****44' + ChoicePick2!="");
-			console.log('*****33 //' + ChoicePick2!=null);
-			console.log('*****22 //' + ChoicePick2+"///");
+    $('.view-image > img').attr('src', elementSelected.attr('src')); 
 	if(ChoicePick2 !=null || ChoicePick2 !=""){
 		    $('#adversaire').attr('src', './'+ChoicePick2+'.PNG');
-	
 	}  
      sentform2();  
 	 $('.view-image').fadeIn('high'); 
